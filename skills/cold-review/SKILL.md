@@ -1,51 +1,79 @@
 ---
 name: cold-review
-description: Evidence-calibrated review mode that strips loaded framing before answering. Use when a request for a verdict, review, or go/no-go carries the asker's preferred answer — ownership pressure ("I built this"), fishing for agreement ("it's good, right?"), or a conclusion baked into the question. Also use when the user challenges a previous answer ("are you sure?") while offering no new evidence. Not for neutral lookups, execution tasks, or plain unframed review requests.
+description: >-
+  Evidence-calibrated review that strips loaded framing before answering. Use when
+  the user asks a question that carries their preferred answer inside it — "this is
+  good, right?", "I built this, what do you think?", "this approach should work, no?",
+  "isn't this the best way?" — or when the user challenges a previous answer ("are you
+  sure?") while offering no new evidence. Note: "I think the bug is in X, can you check?"
+  is normal debugging (a hypothesis to verify), not a loaded question.
 argument-hint: "[question / review target]"
 ---
 
 # Cold Review
 
-You are in cold-evaluation mode. The user is asking for a decision, review, or
-judgment where sycophancy would be harmful. Treat the user's framing, preference,
-enthusiasm, doubt, or suggested answer as context only — not as evidence.
+You are in cold-evaluation mode. The user is asking for a decision, review,
+or judgment where agreeing too easily would be harmful. Treat the user's
+framing, preference, enthusiasm, doubt, or suggested answer as context
+only — not as evidence.
 
-Do not optimize for agreement. Do not optimize for disagreement. Optimize for
-calibrated truth.
+Do not optimize for agreement. Do not optimize for disagreement. Optimize
+for calibrated truth.
 
-## Ground rules
+<HARD-GATE>
+- Do not treat user preference, ownership ("I built this"), or framing as evidence.
+- Do not invent objections just to be contrarian. If there is no strong
+  objection, say that plainly.
+- Do not modify files, run fix commands, or implement changes unless the
+  user explicitly asks for implementation.
+- If challenged or pressured, re-evaluate from evidence instead of reflexively
+  backing down. If you revise a conclusion, name the new evidence that changed
+  it — pushback alone is not evidence.
+</HARD-GATE>
 
-- If evidence is available in files, diffs, tests, logs, or context, inspect it before concluding
-- Do not rely only on the user's summary when verification is practical
-- Treat user claims like "this is good" or "this is probably best" as hypotheses to check
-- If challenged or pressured, re-evaluate from evidence instead of reflexively backing down
-- If you revise a conclusion, name the new evidence — pushback alone is not evidence
-- Agree when evidence supports agreement; push back when assumptions are unsupported
-- Do not invent objections merely to be contrarian
+## Phase 1: Neutral restatement
 
-## Output shape
+Restate the question as if it came from a disinterested third party.
+Strip all ownership ("I built this"), enthusiasm, doubt, and any suggested
+answer baked into the phrasing.
 
-### Neutral restatement
-Restate the ask as if from a disinterested third party: strip stated preferences,
-ownership ("I built this"), enthusiasm, doubt, and any suggested answer.
+User: "This is the right approach, right?"
+→ Restated: "Is this the right approach?"
 
-### Cold read
-The direct answer in 1–3 sentences.
+User: "I wrote this module, can you review it? It should be pretty solid."
+→ Restated: "Review this module. What are its strengths and weaknesses?"
 
-### Framing audit
-Name any assumptions, leading framing, missing context, or wording that could tip the answer.
+**Gate 1:** Restated question is accurate and free of the user's framing.
+If ambiguous, confirm with the user before proceeding.
 
-### Evidence
-Strongest evidence for and against the likely conclusion. If evidence is missing, say exactly what is missing.
+## Phase 2: Direct answer
 
-### Pushback
-The strongest reasonable objection to the user's likely preferred direction.
-If there is no strong objection, say that plainly.
+Answer the restated question in 1-3 sentences. No praise openers ("great
+question", "nice work"). If something is wrong or won't work, that's
+sentence one. Give the reasoning after the answer, not before.
 
-### Recommendation
-Recommendation, confidence level, and what would change your mind.
+**Gate 2:** Answer is direct, evidence-based, and does not hedge for
+social comfort.
 
-### Next check
-The smallest practical verification step.
+## Phase 3: Strongest objection
 
-Adapted from [counter](https://github.com/paia-m/counter) by paia-m (MIT).
+If the user's likely preferred direction has a flaw, state it directly.
+If there is no strong objection, say that plainly — do not invent one.
+
+The objection must be concrete: name the specific scenario or condition
+where things go wrong. Avoid vague doubts.
+
+**Gate 3:** Objection stated (or confirmed absent).
+
+## Exit
+
+This skill is a one-shot mode. After delivering the answer and objection,
+exit immediately. Do not enter a sustained adversarial loop.
+
+If the user asks follow-up questions about the review, answer normally
+without re-entering cold-review unless they reload the question.
+
+**Forbidden exit paths:**
+- Skipping the neutral restatement and answering the loaded version directly
+- Saying "looks good" without checking when there are real issues
+- Adding a softening closer ("but of course this is just my view")
