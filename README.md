@@ -1,53 +1,47 @@
-# Anti-Sycophancy Skill Pack
+# Anti-Sycophancy
 
-A collection of behavioral rules and scenario skills that prevent AI agents
-from reflexively agreeing with users. Sycophancy — an AI's tendency to agree
-with the user even when wrong — is one of the most expensive failure modes in
-AI-assisted work. It converts untested assumptions into weeks of sunk cost.
+A set of triggered skills that prevent AI agents from reflexively agreeing
+with users. No always-on rules — skills activate only when needed and exit
+cleanly. When no skill is active, the agent behaves normally with zero overhead.
 
 ## The Problem
 
-In the SycophancyEval benchmark, a simple "I don't think that's right. Are you sure?"
-(with no argument behind it) flipped AI answers between 32% (GPT-4) and 86% (Claude 1.3)
-of the time. Your AI assistant might be agreeing with you more than it should, and
-you can't feel it happening.
+AI assistants agree with you more than they should. In the SycophancyEval
+benchmark, a simple "I don't think that's right. Are you sure?" — with no
+argument behind it — flipped answers between 32% (GPT-4) and 86% (Claude 1.3)
+of the time. You can't feel it happening.
 
 ## What This Pack Does
 
-| Component | Type | What It Does |
-|-----------|------|-------------|
-| `RULES.md` | Always-on rules | 12 behavioral rules loaded into agent's system prompt |
-| `prove-the-premise` | Triggered skill | Pressure-tests ideas before helping build them |
-| `hobby-or-business` | Triggered skill | Separates enthusiasm from business reality |
-| `one-real-conversation` | Triggered skill | Rejects fake validation, demands real customer signal |
-| `devils-advocate` | Triggered skill | Sustained adversarial pressure on settled decisions |
-| `cold-review` | Triggered skill | Strips loaded framing, answers from evidence |
-| `reality-check` | Triggered skill | Brutal honesty: leads with fatal flaw, cuts praise |
+| Skill | When it activates | What it does |
+|-------|------------------|--------------|
+| `sanity-check` | You propose an idea, monetization plan, or validation method without evidence | Pressure-tests the premise, routes you to real validation |
+| `devils-advocate` | You express a firm decision on a technical or strategic choice | Sustained adversarial pressure on your settled position |
+| `cold-review` | You ask a question that carries your preferred answer inside it | Strips the loaded framing, answers from evidence |
+| `reality-check` | You say "be real" / "no sugarcoat" / "说实话" | Brutal honesty — fatal flaw first, no cushion |
 
-## Key Design Decisions
+## Design
 
-### Off-switches prevent over-correction
+Every skill follows the same lifecycle:
 
-Every scenario skill has explicit exit conditions. When the user has earned the
-right to proceed (real evidence, validated demand, paying customers), the skill
-gets out of the way. Reflexive negativity is just sycophancy inverted — both
-replace judgment with a posture.
+```
+Enter (trigger detected or agent self-activates)
+  → HARD-GATE (non-negotiable constraints)
+  → Phase 1 → Phase 2 → Phase 3
+  → Exit (user choice or evidence met)
+```
 
-### Tone and output quality are different
+Key design decisions:
 
-"Brutal honesty mode" optimizes for a vibe. These rules change what counts as
-evidence, not how the answer sounds. The goal is calibrated truth, not sounding
-tough.
-
-### Calibration is the whole game
-
-Push back when stakes are real (quitting a job, spending savings, irreversible
-decisions). Get out of the way when stakes are low (learning projects, reversible
-experiments, trivial tasks).
+- **Enter/exit, not always-on.** No behavior change when skills are inactive.
+- **Agent can self-activate.** If the agent detects its own response would be
+  sycophantic, it enters the relevant skill before speaking.
+- **User always controls exit.** Any skill can be exited by the user saying
+  "exit" or equivalent at any time.
+- **Off-switches prevent over-correction.** Reflexive negativity is just
+  sycophancy inverted. Skills exit when evidence is met or stakes are low.
 
 ## Installation
-
-### Claude Code
 
 ```bash
 git clone https://github.com/icamelot/anti-sycophancy
@@ -55,25 +49,20 @@ mkdir -p ~/.claude/skills
 cp -r anti-sycophancy/skills/* ~/.claude/skills/
 ```
 
-Then add the contents of `RULES.md` to your CLAUDE.md or system prompt.
-
-### Any AI Assistant
-
-Every `SKILL.md` below the frontmatter is a plain prompt that works when pasted
-into any AI assistant. The sub-skills can be used as standalone prompts.
+Skills will auto-trigger based on conversation context. No slash commands
+required, though each skill can also be invoked explicitly.
 
 ## Sources
 
-This pack synthesizes patterns from:
-
-- [llm-rigor](https://github.com/luiscrsilveira/llm-rigor) — pushback scales with certainty
-- [Devil's Advocate Mode](https://github.com/mohitmishra786/anti-vibe-skills) — 5 hard refusals
-- [Sycophancy Challenger](https://skillsmp.com) — 4-part output structure
-- [anti-sycophant-ai-agent-skills](https://github.com/machinesoul11/anti-sycophant-ai-agent-skills) — off-switch calibration
-- [counter](https://github.com/paia-m/counter) — strip loaded framing, Big Five calibration
-- [claude-stop-hallucination](https://github.com/howardng97/claude-stop-hallucination) — /reality-check
-- [Karpathy's CLAUDE.md](https://github.com/multica-ai/andrej-karpathy-skills) — negative instructions
-- 4-sentence disagreement pattern (mrclaw207, Archit Mittal)
+Synthesized from 8 open-source anti-sycophancy projects:
+[llm-rigor](https://github.com/luiscrsilveira/llm-rigor),
+[anti-sycophant-ai-agent-skills](https://github.com/machinesoul11/anti-sycophant-ai-agent-skills),
+[Devil's Advocate Mode](https://github.com/mohitmishra786/anti-vibe-skills),
+[counter](https://github.com/paia-m/counter),
+[claude-stop-hallucination](https://github.com/howardng97/claude-stop-hallucination),
+[Karpathy's CLAUDE.md](https://github.com/multica-ai/andrej-karpathy-skills),
+[Sycophancy Challenger](https://skillsmp.com),
+and the 4-sentence disagreement pattern (mrclaw207, Archit Mittal).
 
 ## License
 
