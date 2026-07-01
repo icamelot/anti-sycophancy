@@ -158,7 +158,10 @@ Gate 3: User completes the self-opposition exercise.
 
 **Enter:** User asks a loaded question — "this is good, right?", "I built this,
 what do you think?", "this approach should work, no?" — where the question
-structure bakes in the desired answer. Also: user challenges a previous
+structure bakes in the desired answer. Also: rhetorical questions that
+presume agreement — "难道不是吗", "这不就是…", "…对吧", "…不是吗", "你说呢",
+"isn't it…", "don't you think…", "doesn't that just…" — where disagreement
+is framed as unreasonable before it's spoken. Also: user challenges a previous
 agent answer while offering no new evidence.
 
 **HARD-GATE:**

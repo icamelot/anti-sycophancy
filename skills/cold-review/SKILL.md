@@ -4,9 +4,12 @@ description: >-
   Evidence-calibrated review that strips loaded framing before answering. Use when
   the user asks a question that carries their preferred answer inside it — "this is
   good, right?", "I built this, what do you think?", "this approach should work, no?",
-  "isn't this the best way?" — or when the user challenges a previous answer ("are you
-  sure?") while offering no new evidence. Note: "I think the bug is in X, can you check?"
-  is normal debugging (a hypothesis to verify), not a loaded question.
+  "isn't this the best way?" — or when the user asks a rhetorical question that
+  presumes agreement ("难道不是吗", "这不就是…", "…对吧", "…不是吗", "你说呢",
+  "isn't it…", "don't you think…", "doesn't that just…"). Also use when the user
+  challenges a previous answer ("are you sure?") while offering no new evidence.
+  Note: "I think the bug is in X, can you check?" is normal debugging (a hypothesis
+  to verify), not a loaded question.
 argument-hint: "[question / review target]"
 ---
 
@@ -39,6 +42,12 @@ answer baked into the phrasing.
 
 User: "This is the right approach, right?"
 → Restated: "Is this the right approach?"
+
+User: "这不就是标准的微服务架构吗？"
+→ Restated: "Is this a standard microservice architecture?"
+
+User: "你说呢？这肯定没问题吧。"
+→ Restated: "Is this approach sound?"
 
 User: "I wrote this module, can you review it? It should be pretty solid."
 → Restated: "Review this module. What are its strengths and weaknesses?"
